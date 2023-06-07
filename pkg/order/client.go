@@ -1,13 +1,12 @@
 package order
 
 import (
-	"fmt"
+    "fmt"
 
-	"github.com/athunlal/api-gateway/pkg/config"
-	"github.com/athunlal/api-gateway/pkg/order/pb"
-	"google.golang.org/grpc"
+    "github.com/athunlal/api-gateway/pkg/config"
+    "github.com/athunlal/api-gateway/pkg/order/pb"
+    "google.golang.org/grpc"
 )
-
 
 type ServiceClient struct {
     Client pb.OrderServiceClient

@@ -6,6 +6,8 @@ import (
 
 	"github.com/athunlal/api-gateway/pkg/auth"
 	"github.com/athunlal/api-gateway/pkg/config"
+	"github.com/athunlal/api-gateway/pkg/order"
+	"github.com/athunlal/api-gateway/pkg/product"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,7 +21,10 @@ func main() {
 	r := gin.Default()
 
 	authSvc := *auth.RegisterRoutes(r, &c)
-	fmt.Println("The authentication serivce is : ", authSvc)
+	product.RegisterRoutes(r, &c, &authSvc)
+	order.RegisterRoutes(r, &c, &authSvc)
+
+	fmt.Println("The authentication service is : ", authSvc)
 
 	r.Run(c.Port)
 }

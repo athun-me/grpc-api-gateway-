@@ -9,42 +9,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
-
 type AuthMiddlewareConfig struct {
-    svc *ServiceClient
+	svc *ServiceClient
 }
 
 func InitAuthMiddleware(svc *ServiceClient) AuthMiddlewareConfig {
-    return AuthMiddlewareConfig{svc}
+	return AuthMiddlewareConfig{svc}
 }
 
 func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context) {
-    authorization := ctx.Request.Header.Get("authorization")
+	authorization := ctx.Request.Header.Get("authorization")
 
-    if authorization == "" {
-        ctx.AbortWithStatus(http.StatusUnauthorized)
-        return
-    }
+	if authorization == "" {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
-    token := strings.Split(authorization, "Bearer ")
+	token := strings.Split(authorization, "Bearer")
 
-    if len(token) < 2 {
-        ctx.AbortWithStatus(http.StatusUnauthorized)
-        return
-    }
+	if len(token) < 2 {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
-    res, err := c.svc.Client.Validate(context.Background(), &pb.ValidateRequest{
-        Token: token[1],
-    })
+	res, err := c.svc.Client.Validate(context.Background(), &pb.ValidateRequest{
+		Token: token[1],
+	})
 
-    if err != nil || res.Status != http.StatusOK {
-        ctx.AbortWithStatus(http.StatusUnauthorized)
-        return
-    }
+	if err != nil || res.Status != http.StatusOK {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
-    ctx.Set("userId", res.UserId)
+	ctx.Set("userId", res.UserId)
 
-    ctx.Next()
+	ctx.Next()
 }
