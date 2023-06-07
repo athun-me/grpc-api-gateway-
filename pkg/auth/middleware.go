@@ -25,7 +25,7 @@ func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context) {
 		return
 	}
 
-	token := strings.Split(authorization, "Bearer")
+	token := strings.Split(authorization, "Bearer ")
 
 	if len(token) < 2 {
 		ctx.AbortWithStatus(http.StatusUnauthorized)

@@ -11,20 +11,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+
 func main() {
-	c, err := config.LoadConfig()
+    c, err := config.LoadConfig()
 
-	if err != nil {
-		log.Fatalln("Failed at config", err)
-	}
+    if err != nil {
+        log.Fatalln("Failed at config", err)
+    }
 
-	r := gin.Default()
+    r := gin.Default()
 
-	authSvc := *auth.RegisterRoutes(r, &c)
-	product.RegisterRoutes(r, &c, &authSvc)
-	order.RegisterRoutes(r, &c, &authSvc)
-
+    authSvc := *auth.RegisterRoutes(r, &c)
+    product.RegisterRoutes(r, &c, &authSvc)
+    order.RegisterRoutes(r, &c, &authSvc)
 	fmt.Println("The authentication service is : ", authSvc)
 
-	r.Run(c.Port)
+    r.Run(c.Port)
 }
