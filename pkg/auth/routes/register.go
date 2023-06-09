@@ -7,28 +7,29 @@ import (
 	"github.com/athunlal/api-gateway/pkg/auth/pb"
 	"github.com/gin-gonic/gin"
 )
+
 type RegisterRequestBody struct {
-    Email    string `json:"email"`
-    Password string `json:"password"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 func Register(ctx *gin.Context, c pb.AuthServiceClient) {
-    body := RegisterRequestBody{}
+	body := RegisterRequestBody{}
 
-    if err := ctx.BindJSON(&body); err != nil {
-        ctx.AbortWithError(http.StatusBadRequest, err)
-        return
-    }
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
-    res, err := c.Register(context.Background(), &pb.RegisterRequst{
-        Email:    body.Email,
-        Password: body.Password,
-    })
+	res, err := c.Register(context.Background(), &pb.RegisterRequst{
+		Email:    body.Email,
+		Password: body.Password,
+	})
 
-    if err != nil {
-        ctx.AbortWithError(http.StatusBadGateway, err)
-        return
-    }
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadGateway, err)
+		return
+	}
 
-    ctx.JSON(int(res.Status), &res)
+	ctx.JSON(int(res.Status), &res)
 }

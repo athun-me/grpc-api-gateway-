@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,7 +11,14 @@ import (
 )
 
 func FindOne(ctx *gin.Context, c pb.ProductServiceClient) {
-	id, _ := strconv.ParseInt(ctx.Param("id"), 10, 32)
+	
+	idStr := ctx.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 32)
+	
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Sprintf("Invalid ID: %s", idStr))
+		return
+	}
 
 	res, err := c.FindOne(context.Background(), &pb.FindOneRequest{
 		Id: int64(id),
@@ -21,5 +29,5 @@ func FindOne(ctx *gin.Context, c pb.ProductServiceClient) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, &res)
+	ctx.JSON(http.StatusFound, &res)
 }

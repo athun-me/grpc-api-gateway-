@@ -35,4 +35,5 @@ func CreateOrder(ctx *gin.Context, c pb.OrderServiceClient) {
 	}
 
 	ctx.JSON(http.StatusCreated, &res)
+	
 }
